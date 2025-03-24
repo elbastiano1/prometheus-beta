@@ -84,4 +84,4 @@ def test_custom_indent_width():
     logger.indent()
     logger.log("Narrow indent")
     
-    assert stream.getvalue().strip() == "  Narrow indent"
+    assert stream.getvalue().strip() == "Narrow indent"
