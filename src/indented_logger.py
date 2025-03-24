@@ -33,7 +33,7 @@ class IndentedLogger:
             message (str): The message to log.
         """
         indent = self._indent_char * (self._indent_width * self._current_indent)
-        print(f"{indent}{message}", file=self._output_stream, flush=True)
+        print(indent + message, file=self._output_stream, flush=True)
     
     def indent(self):
         """
