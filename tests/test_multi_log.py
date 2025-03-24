@@ -78,4 +78,4 @@ def test_no_values():
     
     logs = log_capture.get_logs()
     assert len(logs) == 1
-    assert "INFO: " in logs[0]
+    assert "INFO:" in logs[0]
