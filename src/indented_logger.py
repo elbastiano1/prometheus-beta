@@ -33,22 +33,34 @@ class IndentedLogger:
             message (str): The message to log.
         """
         indent = self._indent_char * (self._indent_width * self._current_indent)
-        print(f"{indent}{message}", file=self._output_stream)
+        print(f"{indent}{message}", file=self._output_stream, flush=True)
     
     def indent(self):
         """
         Increase the indentation level by 1.
+        
+        Returns:
+            IndentedLogger: The current logger instance, for method chaining.
         """
         self._current_indent += 1
+        return self
     
     def dedent(self):
         """
         Decrease the indentation level by 1, ensuring it doesn't go below 0.
+        
+        Returns:
+            IndentedLogger: The current logger instance, for method chaining.
         """
         self._current_indent = max(0, self._current_indent - 1)
+        return self
     
     def reset_indent(self):
         """
         Reset the indentation level to 0.
+        
+        Returns:
+            IndentedLogger: The current logger instance, for method chaining.
         """
         self._current_indent = 0
+        return self
