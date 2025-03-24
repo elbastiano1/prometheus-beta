@@ -80,8 +80,8 @@ def test_custom_indent_char():
 def test_custom_indent_width():
     """Test logging with a custom indent width."""
     stream = io.StringIO()
-    logger = IndentedLogger(output_stream=stream, indent_width=3)
+    logger = IndentedLogger(output_stream=stream, indent_width=2)
     logger.indent()
-    logger.log("Wide indent")
+    logger.log("Narrow indent")
     
-    assert stream.getvalue().strip() == "   Wide indent"
+    assert stream.getvalue().strip() == "  Narrow indent"
