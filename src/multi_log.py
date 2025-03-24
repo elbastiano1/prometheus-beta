@@ -42,8 +42,8 @@ def log_multiple_values(*values, level='info', logger=None):
     if level not in log_levels:
         raise ValueError(f"Invalid logging level. Supported levels are: {', '.join(log_levels.keys())}")
 
-    # Convert values to strings and join
-    log_message = ' '.join(str(value) for value in values)
+    # Convert values to strings and join (handle case of no values)
+    log_message = ' '.join(str(value) for value in values) if values else ''
 
     # Log the message using the specified level
     log_levels[level](log_message)
