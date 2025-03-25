@@ -32,12 +32,19 @@ def decompress_bzip2_file(input_file_path, output_file_path=None):
         with bz2.open(input_file_path, 'rb') as compressed_file:
             # Open output file in write binary mode
             with open(output_file_path, 'wb') as output_file:
-                # Decompress and write contents
-                output_file.write(compressed_file.read())
+                # Try to read and decompress contents
+                decompressed_content = compressed_file.read()
+                
+                # Validate that decompression worked
+                if not decompressed_content:
+                    raise ValueError(f"Invalid bzip2 compressed file: {input_file_path}")
+                
+                # Write decompressed contents
+                output_file.write(decompressed_content)
 
         return output_file_path
 
-    except bz2.BZip2Error:
+    except (OSError, EOFError):
         raise ValueError(f"Invalid bzip2 compressed file: {input_file_path}")
     except PermissionError:
         raise PermissionError(f"Permission denied when writing to {output_file_path}")
