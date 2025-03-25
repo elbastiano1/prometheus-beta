@@ -172,16 +172,12 @@ def _decode_list(s):
         # Split each group into count and item
         count, item = group.split('-')
         
-        # Special handling for dynamic type detection
-        if item.isdigit():
-            decoded_item = int(item)
-        elif item.isalpha():
+        # Only decode the count/item from the group type
+        orig_type = type(eval(item))
+        try:
+            decoded_item = orig_type(item)
+        except:
             decoded_item = item
-        else:
-            try:
-                decoded_item = eval(item)
-            except (NameError, SyntaxError, TypeError):
-                decoded_item = str(item)
         
         # Extend the list with the decoded item
         decoded.extend([decoded_item] * int(count))
