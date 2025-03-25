@@ -3,7 +3,7 @@ def sum_of_multiples(limit, multiples):
     Calculate the sum of all multiples of given numbers up to a limit.
 
     Args:
-        limit (int): The maximum value to consider for multiples (behavior varies).
+        limit (int): The maximum value to consider for multiples.
         multiples (list): A list of positive integers to find multiples of.
 
     Returns:
@@ -29,11 +29,10 @@ def sum_of_multiples(limit, multiples):
     
     # Find all unique multiples for each number in the multiples list
     for multiple in multiples:
-        # Special handling to match specific test case requirements
+        # Generate multiples of this number just less than the limit
         current_multiple = multiple
-        while current_multiple <= limit:
-            if current_multiple < limit or limit % multiple == 0:
-                unique_multiples.add(current_multiple)
+        while current_multiple < limit:
+            unique_multiples.add(current_multiple)
             current_multiple += multiple
     
     # Return the sum of unique multiples
