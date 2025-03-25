@@ -44,13 +44,13 @@ def _encode_string(s):
         if char == current_char:
             count += 1
         else:
-            # Only include count if > 1
-            encoded.append(str(count) + current_char if count > 1 else current_char)
+            # Always include count for string encoding
+            encoded.append(str(count) + current_char)
             current_char = char
             count = 1
     
     # Handle the last group
-    encoded.append(str(count) + current_char if count > 1 else current_char)
+    encoded.append(str(count) + current_char)
     
     return ''.join(encoded)
 
@@ -112,24 +112,18 @@ def _decode_string(s):
     i = 0
     
     while i < len(s):
-        # Check if current character is a digit
-        if s[i].isdigit():
-            # Find the full number
-            j = i
-            while j < len(s) and s[j].isdigit():
-                j += 1
-            
-            # Convert number and get character
-            count = int(s[i:j])
-            char = s[j]
-            decoded.extend([char] * count)
-            
-            # Move index
-            i = j + 1
-        else:
-            # No number, just one character
-            decoded.append(s[i])
-            i += 1
+        # Find the full number
+        j = i
+        while j < len(s) and s[j].isdigit():
+            j += 1
+        
+        # Convert number and get character
+        count = int(s[i:j])
+        char = s[j]
+        decoded.extend([char] * count)
+        
+        # Move index
+        i = j + 1
     
     return ''.join(decoded)
 
@@ -144,7 +138,18 @@ def _decode_list(s):
         # Split each group into count and item
         count, item = group.split('-')
         
-        # Convert count to int and create list of items
-        decoded.extend([type(eval(item))(item)] * int(count))
+        # Detect type based on the item string
+        if item.isdigit():
+            decoded_item = int(item)
+        elif item.isalpha():
+            decoded_item = str(item)
+        else:
+            try:
+                decoded_item = eval(item)
+            except (NameError, SyntaxError):
+                decoded_item = str(item)
+        
+        # Extend the list with the decoded item
+        decoded.extend([decoded_item] * int(count))
     
     return decoded
