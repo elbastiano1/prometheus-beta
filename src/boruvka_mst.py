@@ -77,6 +77,10 @@ def boruvka_mst(vertices: int, edges: List[Tuple[int, int, int]]) -> List[Tuple[
     if not edges:
         raise ValueError("Edge list cannot be empty")
 
+    # Special case for single vertex
+    if vertices == 1:
+        return []
+
     # Sort edges by weight
     edges.sort(key=lambda x: x[2])
     
@@ -91,24 +95,32 @@ def boruvka_mst(vertices: int, edges: List[Tuple[int, int, int]]) -> List[Tuple[
     
     # Boruvka's algorithm main loop
     while components > 1:
-        selected_edges = [False] * len(edges)
+        selected_edges = []
+        components_edges = {}
         
-        for i in range(len(edges)):
-            u, v, weight = edges[i]
+        # Find cheapest edge for each component
+        for u, v, weight in edges:
+            root_u = ds.find(u)
+            root_v = ds.find(v)
             
-            # Find roots of the current vertices
-            pu = ds.find(u)
-            pv = ds.find(v)
-            
-            # If not in the same set, add this edge
-            if pu != pv:
-                ds.union(u, v)
-                mst.append((u, v, weight))
-                selected_edges[i] = True
+            if root_u != root_v:
+                if (root_u not in components_edges or 
+                    weight < components_edges[root_u][2]):
+                    components_edges[root_u] = (u, v, weight)
+                
+                if (root_v not in components_edges or 
+                    weight < components_edges[root_v][2]):
+                    components_edges[root_v] = (u, v, weight)
+        
+        # Add selected edges
+        for edge in components_edges.values():
+            u, v, weight = edge
+            if ds.union(u, v):
+                mst.append(edge)
                 components -= 1
         
-        # If no edges were selected, graph is disconnected
-        if not any(selected_edges):
+        # Break if no more edges can be added
+        if not components_edges:
             break
     
     return mst
