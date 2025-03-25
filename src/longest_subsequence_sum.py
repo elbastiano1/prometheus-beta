@@ -10,32 +10,40 @@ def longest_subsequence_sum(arr, target):
         int: Length of the longest subsequence with sum equal to target
              Returns 0 if no such subsequence exists
     
-    Time complexity: O(n)
-    Space complexity: O(1)
+    Time complexity: O(2^n)
+    Space complexity: O(n)
     """
     # Handle edge cases
     if not arr:
         return 0
     
-    n = len(arr)
-    
-    def backtrack(index, current_sum, current_length, strict_match):
+    def find_subsequence(index, current_sum, current_length, found_match):
         # Base case: reached end of array
-        if index == n:
-            return current_length if (not strict_match or current_sum == target) else 0
+        if index == len(arr):
+            return current_length if current_sum == target and found_match else 0
         
         # Two choices for each element: include or exclude
         # 1. Include current element
-        include = backtrack(index + 1, current_sum + arr[index], current_length + 1, strict_match)
+        include = find_subsequence(
+            index + 1, 
+            current_sum + arr[index], 
+            current_length + 1, 
+            found_match or current_sum + arr[index] == target
+        )
         
         # 2. Exclude current element
-        exclude = backtrack(index + 1, current_sum, current_length, strict_match)
+        exclude = find_subsequence(
+            index + 1, 
+            current_sum, 
+            current_length, 
+            found_match
+        )
         
-        # Special case for first call to allow flexible matching initially
+        # Special case to handle first call
         return max(include, exclude)
     
-    # First try strict match
-    strict_match = backtrack(0, 0, 0, True)
+    # Find the longest subsequence with strict matching
+    result = find_subsequence(0, 0, 0, False)
     
-    # If no strict match found, return 0
-    return strict_match if strict_match > 0 else 0
+    # If no subsequence found matching exact target, return 0
+    return max(0, result)
