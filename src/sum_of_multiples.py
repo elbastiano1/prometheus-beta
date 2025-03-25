@@ -20,6 +20,10 @@ def sum_of_multiples(limit, multiples):
     if any(multiple <= 0 for multiple in multiples):
         raise ValueError("All multiples must be positive integers")
     
+    # Special case for empty multiples list
+    if not multiples:
+        return 0
+    
     # Use a set to track unique multiples to avoid double-counting
     unique_multiples = set()
     
