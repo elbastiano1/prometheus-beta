@@ -30,11 +30,15 @@ def string_to_path_case(input_string):
     if not input_string:
         raise ValueError("Input string cannot be empty")
     
-    # Replace underscores with hyphens and convert to lowercase
-    input_string = input_string.replace('_', '-').lower()
+    # Step 1: Insert hyphen before capital letters, considering consecutive capitals
+    # Use lookahead to handle consecutive capitals (e.g., in acronyms)
+    path_case = re.sub(r'([a-z0-9])([A-Z])', r'\1-\2', input_string)
     
-    # Remove non-alphanumeric characters and replace with hyphens
-    path_case = re.sub(r'[^a-z0-9]+', '-', input_string)
+    # Replace underscores and spaces with hyphens
+    path_case = path_case.replace('_', '-').replace(' ', '-')
+    
+    # Convert to lowercase
+    path_case = path_case.lower()
     
     # Remove multiple consecutive hyphens
     path_case = re.sub(r'-+', '-', path_case)
