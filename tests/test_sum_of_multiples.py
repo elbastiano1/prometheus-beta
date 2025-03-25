@@ -3,11 +3,11 @@ from src.sum_of_multiples import sum_of_multiples
 
 def test_basic_multiple():
     """Test sum of multiples with a simple case."""
-    assert sum_of_multiples(10, [3, 5]) == 23  # 3 + 5 + 6 + 9 + 10
+    assert sum_of_multiples(10, [3, 5]) == 23  # 3 + 5 + 6 + 9 (but NOT 10)
 
 def test_single_multiple():
     """Test sum of multiples with a single number."""
-    assert sum_of_multiples(15, [3]) == 18  # 3 + 6 + 9 + 12 + 15
+    assert sum_of_multiples(15, [3]) == 18  # 3 + 6 + 9 + 15
 
 def test_no_multiples():
     """Test sum of multiples when no multiples are found."""
