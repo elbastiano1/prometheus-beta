@@ -1,3 +1,5 @@
+import re
+
 def to_alternating_camel_case(s: str) -> str:
     """
     Convert a string to alternating camel case.
@@ -23,13 +25,16 @@ def to_alternating_camel_case(s: str) -> str:
     if not isinstance(s, str):
         raise TypeError("Input must be a string")
     
+    # Remove non-alphanumeric characters and normalize spaces
+    cleaned_s = re.sub(r'[^a-zA-Z\s]', '', s.strip())
+    
     # Handle empty string case
-    if not s:
+    if not cleaned_s:
         return ""
     
     # Convert to alternating case
     result = []
-    for i, char in enumerate(s.replace(' ', '')):
+    for i, char in enumerate(cleaned_s.replace(' ', '')):
         if i % 2 == 0:
             result.append(char.lower())
         else:
