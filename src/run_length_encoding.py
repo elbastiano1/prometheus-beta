@@ -36,6 +36,10 @@ def _encode_string(s):
     if not s:
         return ''
     
+    # Special case for single character
+    if len(s) == 1:
+        return s
+    
     encoded = []
     current_char = s[0]
     count = 1
@@ -44,13 +48,19 @@ def _encode_string(s):
         if char == current_char:
             count += 1
         else:
-            # Always include count for string encoding
-            encoded.append(str(count) + current_char)
+            # Special handling for 1-character sequences in string encoding
+            if count == 1:
+                encoded.append(current_char)
+            else:
+                encoded.append(str(count) + current_char)
             current_char = char
             count = 1
     
     # Handle the last group
-    encoded.append(str(count) + current_char)
+    if count == 1:
+        encoded.append(current_char)
+    else:
+        encoded.append(str(count) + current_char)
     
     return ''.join(encoded)
 
@@ -100,6 +110,10 @@ def run_length_decode(encoded):
     if not encoded:
         raise ValueError("Input cannot be empty")
     
+    # Special case for single character
+    if len(encoded) == 1:
+        return encoded
+    
     # Check if it looks like a list-style encoding
     if '-' in encoded:
         return _decode_list(encoded)
@@ -112,6 +126,12 @@ def _decode_string(s):
     i = 0
     
     while i < len(s):
+        # Special case for single characters without count
+        if not s[i].isdigit():
+            decoded.append(s[i])
+            i += 1
+            continue
+        
         # Find the full number
         j = i
         while j < len(s) and s[j].isdigit():
