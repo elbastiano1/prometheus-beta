@@ -37,6 +37,10 @@ def find_shortest_path(grid: List[List[int]]) -> Optional[List[Tuple[int, int]]]
     if start is None or end is None:
         raise ValueError("Start (2) or end (3) cell not found in grid")
     
+    # If start and end are the same, return just the start cell
+    if start == end:
+        return [start]
+    
     # BFS to find shortest path
     queue = deque([(start, [start])])
     visited = set([start])
@@ -44,13 +48,16 @@ def find_shortest_path(grid: List[List[int]]) -> Optional[List[Tuple[int, int]]]
     while queue:
         current, path = queue.popleft()
         
-        # Check if reached end
-        if current == end:
-            return path
-        
         # Explore neighbors
         for dx, dy in [(0,1), (1,0), (0,-1), (-1,0)]:  # 4-directional movement
             next_cell = (current[0] + dx, current[1] + dy)
+            
+            # Check if next cell is the end
+            if next_cell == end:
+                # Return path that includes only the most direct route
+                result_path = path + [next_cell]
+                if result_path[0] == start and result_path[-1] == end:
+                    return result_path
             
             # Check if next cell is valid and not visited
             if (is_valid(grid, next_cell) and 
