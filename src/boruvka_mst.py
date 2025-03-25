@@ -81,7 +81,7 @@ def boruvka_mst(vertices: int, edges: List[Tuple[int, int, int]]) -> List[Tuple[
     if vertices == 1:
         return []
 
-    # Sort edges by weight
+    # Sort edges by weight in ascending order
     edges.sort(key=lambda x: x[2])
     
     # Initialize Disjoint Set
@@ -95,32 +95,38 @@ def boruvka_mst(vertices: int, edges: List[Tuple[int, int, int]]) -> List[Tuple[
     
     # Boruvka's algorithm main loop
     while components > 1:
-        selected_edges = []
-        components_edges = {}
+        # Track components and their cheapest incoming edges
+        component_cheapest_edges = {}
         
-        # Find cheapest edge for each component
+        # Find cheapest edges for each component
         for u, v, weight in edges:
             root_u = ds.find(u)
             root_v = ds.find(v)
             
+            # Different component roots
             if root_u != root_v:
-                if (root_u not in components_edges or 
-                    weight < components_edges[root_u][2]):
-                    components_edges[root_u] = (u, v, weight)
+                # Update cheapest for first component
+                if root_u not in component_cheapest_edges or weight < component_cheapest_edges[root_u][2]:
+                    component_cheapest_edges[root_u] = (u, v, weight)
                 
-                if (root_v not in components_edges or 
-                    weight < components_edges[root_v][2]):
-                    components_edges[root_v] = (u, v, weight)
+                # Update cheapest for second component
+                if root_v not in component_cheapest_edges or weight < component_cheapest_edges[root_v][2]:
+                    component_cheapest_edges[root_v] = (u, v, weight)
+        
+        # Use set to prevent duplicates
+        selected_edges = set()
         
         # Add selected edges
-        for edge in components_edges.values():
+        for _, edge in enumerate(component_cheapest_edges.values()):
             u, v, weight = edge
             if ds.union(u, v):
-                mst.append(edge)
-                components -= 1
+                if edge not in selected_edges:
+                    mst.append(edge)
+                    selected_edges.add(edge)
+                    components -= 1
         
-        # Break if no more edges can be added
-        if not components_edges:
+        # If no edges can be added, break
+        if len(selected_edges) == 0:
             break
     
     return mst
