@@ -9,11 +9,15 @@ def find_missing_number(nums):
         int: The missing number in the sequence.
     
     Raises:
-        ValueError: If the input list is empty or invalid.
+        ValueError: If the input list is empty or contains duplicate numbers.
     """
     # Check for invalid input
     if not nums:
         raise ValueError("Input list cannot be empty")
+    
+    # Check for duplicates
+    if len(nums) != len(set(nums)):
+        raise ValueError("Input list must contain unique numbers")
     
     # Calculate the expected sum of numbers from 1 to n
     n = len(nums) + 1  # Total expected length with the missing number
