@@ -5,13 +5,15 @@ def test_basic_sorting():
     """Test basic functionality of the function"""
     input_arr = [3, 1, 4, 2, 6, 5]
     expected = [1, 2, 3, 4, 5, 6]
-    assert sort_array_with_even_squares(input_arr) == expected
+    result = sort_array_with_even_squares(input_arr)
+    assert result == expected, f"Expected {expected}, but got {result}"
 
 def test_even_squares_descending():
     """Test that even squares are sorted in descending order"""
     input_arr = [3, 1, 4, 2, 6, 5]
     expected = [1, 6, 2, 4, 3, 5]
-    assert sort_array_with_even_squares(input_arr) == expected
+    result = sort_array_with_even_squares(input_arr)
+    assert result == expected, f"Expected {expected}, but got {result}"
 
 def test_empty_list():
     """Test handling of empty list"""
@@ -27,13 +29,15 @@ def test_only_even_numbers():
     """Test array with only even numbers"""
     input_arr = [8, 4, 2, 6]
     expected = [2, 4, 6, 8]
-    assert sort_array_with_even_squares(input_arr) == expected
+    result = sort_array_with_even_squares(input_arr)
+    assert result == expected, f"Expected {expected}, but got {result}"
 
 def test_negative_numbers():
     """Test array with negative and positive numbers"""
     input_arr = [-3, 4, -2, 1, 6, -1]
     expected = [-3, -2, 1, 4, -1, 6]
-    assert sort_array_with_even_squares(input_arr) == expected
+    result = sort_array_with_even_squares(input_arr)
+    assert result == expected, f"Expected {expected}, but got {result}"
 
 def test_invalid_input():
     """Test that invalid input raises TypeError"""
