@@ -19,35 +19,33 @@ def sort_array_with_even_squares(arr):
     if not arr:
         return []
     
-    # First, sort the entire array in ascending order
-    sorted_arr = sorted(arr)
+    # Separate odd and even numbers based on input order
+    odds = [num for num in arr if num % 2 != 0]
+    evens = [num for num in arr if num % 2 == 0]
     
-    # Separate even and odd numbers while maintaining their relative order
-    odds = [num for num in sorted_arr if num % 2 != 0]
-    evens = [num for num in sorted_arr if num % 2 == 0]
+    # Sort odds in ascending order
+    odds_sorted = sorted(odds)
     
-    # Sort even numbers by their squares in descending order
-    evens_sorted_by_square = sorted(evens, key=lambda x: x**2, reverse=True)
+    # Sort evens by their squares in descending order
+    evens_sorted = sorted(evens, key=lambda x: x**2, reverse=True)
     
-    # Reconstruct the final list
+    # Merge the lists
     result = []
     odd_index = 0
     even_index = 0
     
-    # Merge the arrays while maintaining ascending overall order
-    # with even numbers being replaced in square-descending order
-    while odd_index < len(odds) and even_index < len(evens_sorted_by_square):
-        if odds[odd_index] <= evens_sorted_by_square[even_index]:
-            result.append(odds[odd_index])
+    while odd_index < len(odds_sorted) and even_index < len(evens_sorted):
+        if odds_sorted[odd_index] <= evens_sorted[even_index]:
+            result.append(odds_sorted[odd_index])
             odd_index += 1
         else:
-            result.append(evens_sorted_by_square[even_index])
+            result.append(evens_sorted[even_index])
             even_index += 1
     
-    # Add any remaining odds
-    result.extend(odds[odd_index:])
+    # Add remaining odds
+    result.extend(odds_sorted[odd_index:])
     
-    # Add any remaining even numbers (in square-descending order)
-    result.extend(evens_sorted_by_square[even_index:])
+    # Add remaining evens (in descending square order)
+    result.extend(evens_sorted[even_index:])
     
     return result
