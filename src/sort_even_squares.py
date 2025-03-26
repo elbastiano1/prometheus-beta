@@ -19,33 +19,25 @@ def sort_array_with_even_squares(arr):
     if not arr:
         return []
     
-    # Separate odd and even numbers based on input order
-    odds = [num for num in arr if num % 2 != 0]
-    evens = [num for num in arr if num % 2 == 0]
+    # Sort the input array first
+    sorted_full = sorted(arr)
     
-    # Sort odds in ascending order
-    odds_sorted = sorted(odds)
+    # Separate indices of even and odd numbers
+    even_indices = [i for i, x in enumerate(sorted_full) if x % 2 == 0]
+    odd_indices = [i for i, x in enumerate(sorted_full) if x % 2 != 0]
     
-    # Sort evens by their squares in descending order
-    evens_sorted = sorted(evens, key=lambda x: x**2, reverse=True)
+    # Sort even numbers by their squares in descending order
+    even_squares_sorted = sorted(
+        [sorted_full[i] for i in even_indices], 
+        key=lambda x: x**2, 
+        reverse=True
+    )
     
-    # Merge the lists
-    result = []
-    odd_index = 0
-    even_index = 0
+    # Reconstruct the final list
+    result = sorted_full.copy()
     
-    while odd_index < len(odds_sorted) and even_index < len(evens_sorted):
-        if odds_sorted[odd_index] <= evens_sorted[even_index]:
-            result.append(odds_sorted[odd_index])
-            odd_index += 1
-        else:
-            result.append(evens_sorted[even_index])
-            even_index += 1
-    
-    # Add remaining odds
-    result.extend(odds_sorted[odd_index:])
-    
-    # Add remaining evens (in descending square order)
-    result.extend(evens_sorted[even_index:])
+    # Replace even numbers at original indices with square-sorted values
+    for i, even_index in enumerate(even_indices):
+        result[even_index] = even_squares_sorted[i]
     
     return result
