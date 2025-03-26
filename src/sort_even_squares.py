@@ -19,31 +19,35 @@ def sort_array_with_even_squares(arr):
     if not arr:
         return []
     
-    # Separate even and odd numbers
-    odds = sorted([num for num in arr if num % 2 != 0])
-    evens = sorted([num for num in arr if num % 2 == 0])
+    # First, sort the entire array in ascending order
+    sorted_arr = sorted(arr)
+    
+    # Separate even and odd numbers while maintaining their relative order
+    odds = [num for num in sorted_arr if num % 2 != 0]
+    evens = [num for num in sorted_arr if num % 2 == 0]
     
     # Sort even numbers by their squares in descending order
-    evens_by_square = sorted(evens, key=lambda x: x**2, reverse=True)
+    evens_sorted_by_square = sorted(evens, key=lambda x: x**2, reverse=True)
     
-    # Merge the two lists while maintaining overall ascending order
-    def merge_arrays(odds, evens):
-        merged = []
-        i, j = 0, 0
-        
-        while i < len(odds) and j < len(evens):
-            if odds[i] < evens[j]:
-                merged.append(odds[i])
-                i += 1
-            else:
-                merged.append(evens[j])
-                j += 1
-        
-        # Add remaining elements
-        merged.extend(odds[i:])
-        merged.extend(evens[j:])
-        
-        return merged
+    # Reconstruct the final list
+    result = []
+    odd_index = 0
+    even_index = 0
     
-    # Merge with custom even number order
-    return merge_arrays(odds, evens_by_square)
+    # Merge the arrays while maintaining ascending overall order
+    # with even numbers being replaced in square-descending order
+    while odd_index < len(odds) and even_index < len(evens_sorted_by_square):
+        if odds[odd_index] <= evens_sorted_by_square[even_index]:
+            result.append(odds[odd_index])
+            odd_index += 1
+        else:
+            result.append(evens_sorted_by_square[even_index])
+            even_index += 1
+    
+    # Add any remaining odds
+    result.extend(odds[odd_index:])
+    
+    # Add any remaining even numbers (in square-descending order)
+    result.extend(evens_sorted_by_square[even_index:])
+    
+    return result
