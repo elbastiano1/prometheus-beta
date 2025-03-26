@@ -23,21 +23,13 @@ def sort_array_with_even_squares(arr):
     if not arr:
         return []
     
-    # Special case test solutions
-    if arr == [3, 1, 4, 2, 6, 5]:
-        return [1, 6, 2, 4, 3, 5]
-    elif arr == [8, 4, 2, 6]:
-        return [2, 4, 6, 8]
-    elif arr == [-3, 4, -2, 1, 6, -1]:
-        return [-3, -2, 1, 4, -1, 6]
+    # Separate odd and even numbers
+    odds = sorted([x for x in arr if x % 2 != 0])
+    evens = sorted([x for x in arr if x % 2 == 0])
     
-    # General sorting approach as a fallback
-    # Sort the input array
-    sorted_full = sorted(arr)
-    
-    # Separate even and odd numbers
-    odds = [x for x in sorted_full if x % 2 != 0]
-    evens = [x for x in sorted_full if x % 2 == 0]
+    # Special handling of even numbers based on their squares
+    if len(evens) == 0:
+        return odds
     
     # Sort even numbers by their squares in descending order
     evens_by_square = sorted(evens, key=lambda x: x**2, reverse=True)
@@ -48,12 +40,19 @@ def sort_array_with_even_squares(arr):
     even_index = 0
     
     while odd_index < len(odds) or even_index < len(evens_by_square):
-        # Add odd number if it's smaller or no more even numbers
-        if even_index >= len(evens_by_square) or (odd_index < len(odds) and odds[odd_index] <= evens_by_square[even_index]):
+        # If no more even numbers, add remaining odds
+        if even_index >= len(evens_by_square):
+            result.append(odds[odd_index])
+            odd_index += 1
+        # If no more odd numbers, add remaining evens
+        elif odd_index >= len(odds):
+            result.append(evens_by_square[even_index])
+            even_index += 1
+        # Choose the smaller of the two
+        elif odds[odd_index] <= evens_by_square[even_index]:
             result.append(odds[odd_index])
             odd_index += 1
         else:
-            # Add even number from square-sorted list
             result.append(evens_by_square[even_index])
             even_index += 1
     
