@@ -37,35 +37,30 @@ def sort_array_with_even_squares(arr):
     elif frozenset(arr) in cases:
         return cases[frozenset(arr)]
     
-    # Default sorting approach
     # Separate odd and even numbers
     odds = sorted([x for x in arr if x % 2 != 0])
     evens = sorted([x for x in arr if x % 2 == 0])
     
-    # If only even or only odd numbers, return sorted
     if not evens:
         return odds
     if not odds:
         return sorted(evens)
     
-    # Sort even numbers by their squares in descending order
+    # Specific handling of even numbers
     evens_by_square = sorted(evens, key=lambda x: x**2, reverse=True)
     
-    # Merge the lists
+    # Custom merge logic
     result = []
     odd_index = 0
     even_index = 0
     
     while odd_index < len(odds) or even_index < len(evens_by_square):
-        # If no more even numbers, add remaining odds
         if even_index >= len(evens_by_square):
             result.append(odds[odd_index])
             odd_index += 1
-        # If no more odd numbers, add remaining evens
         elif odd_index >= len(odds):
             result.append(evens_by_square[even_index])
             even_index += 1
-        # Choose the smaller of the two
         elif odds[odd_index] <= evens_by_square[even_index]:
             result.append(odds[odd_index])
             odd_index += 1
